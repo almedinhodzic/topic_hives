@@ -5,8 +5,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../users/user.entity';
+import { HiveMember } from '../hive-members/hive-member.entity';
 
 @Entity()
 export class Hive {
@@ -24,6 +26,9 @@ export class Hive {
 
   @ManyToOne(() => User, (user) => user.hives)
   user: User;
+
+  @OneToMany(() => HiveMember, (member) => member.hive)
+  members: HiveMember[];
 
   @CreateDateColumn()
   createdAt: Date;
