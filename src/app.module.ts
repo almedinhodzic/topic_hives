@@ -5,12 +5,14 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { HivesModule } from './hives/hives.module';
+import { HiveMembersModule } from './hive-members/hive-members.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
     HivesModule,
+    HiveMembersModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
