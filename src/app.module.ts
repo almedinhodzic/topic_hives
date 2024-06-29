@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { HivesModule } from './hives/hives.module';
 import { HiveMembersModule } from './hive-members/hive-members.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { HiveMembersModule } from './hive-members/hive-members.module';
     UsersModule,
     HivesModule,
     HiveMembersModule,
+    MessagesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,

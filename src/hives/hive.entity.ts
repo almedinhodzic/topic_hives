@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { User } from '../users/user.entity';
 import { HiveMember } from '../hive-members/hive-member.entity';
+import { Message } from '../messages/message.entity';
 
 @Entity()
 export class Hive {
@@ -29,6 +30,9 @@ export class Hive {
 
   @OneToMany(() => HiveMember, (member) => member.hive)
   members: HiveMember[];
+
+  @OneToMany(() => Message, (message) => message.hive)
+  messages: Message[];
 
   @CreateDateColumn()
   createdAt: Date;
