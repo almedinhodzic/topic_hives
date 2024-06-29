@@ -4,8 +4,7 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToOne,
-  JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 
@@ -23,8 +22,7 @@ export class Hive {
   @Column()
   isPrivate: boolean;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @ManyToOne(() => User, (user) => user.hives)
   user: User;
 
   @CreateDateColumn()

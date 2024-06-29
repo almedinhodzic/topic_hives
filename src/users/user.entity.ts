@@ -4,7 +4,10 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
+
+import { Hive } from '../hives/hive.entity';
 
 @Entity()
 export class User {
@@ -19,6 +22,9 @@ export class User {
 
   @Column()
   passwordHash: string;
+
+  @OneToMany(() => Hive, (hive) => hive.user)
+  hives: Hive[];
 
   @CreateDateColumn()
   createdAt: Date;
