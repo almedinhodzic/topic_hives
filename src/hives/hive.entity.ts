@@ -4,27 +4,26 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
+  ManyToOne,
 } from 'typeorm';
-
-import { Hive } from '../hives/hive.entity';
+import { User } from '../users/user.entity';
 
 @Entity()
-export class User {
+export class Hive {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ unique: true })
-  username: string;
-
-  @Column({ unique: true })
-  email: string;
+  @Column()
+  name: string;
 
   @Column()
-  passwordHash: string;
+  description: string;
 
-  @OneToMany(() => Hive, (hive) => hive.user)
-  hives: Hive[];
+  @Column()
+  isPrivate: boolean;
+
+  @ManyToOne(() => User, (user) => user.hives)
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;
