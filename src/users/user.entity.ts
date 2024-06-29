@@ -9,6 +9,7 @@ import {
 
 import { Hive } from '../hives/hive.entity';
 import { Message } from '../messages/message.entity';
+import { DirectMessage } from '../direct-messages/direct-message.entity';
 
 @Entity()
 export class User {
@@ -29,6 +30,12 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.user)
   messages: Message[];
+
+  @OneToMany(() => DirectMessage, (directMessage) => directMessage.sender)
+  directMessagesSent: DirectMessage[];
+
+  @OneToMany(() => DirectMessage, (directMessage) => directMessage.receiver)
+  directMessagesReceived: DirectMessage[];
 
   @CreateDateColumn()
   createdAt: Date;
