@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Hive } from '../hives/hive.entity';
 import { User } from '../users/user.entity';
+import { ThreadMessage } from '../thread-messages/thread-message.entity';
 
 @Entity()
 export class Thread {
@@ -22,6 +24,9 @@ export class Thread {
 
   @ManyToOne(() => User, (user) => user.threads)
   user: User;
+
+  @OneToMany(() => ThreadMessage, (threadMessage) => threadMessage.thread)
+  messages: ThreadMessage[];
 
   @CreateDateColumn()
   createdAt: Date;
