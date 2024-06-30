@@ -11,6 +11,7 @@ import { Hive } from '../hives/hive.entity';
 import { Message } from '../messages/message.entity';
 import { DirectMessage } from '../direct-messages/direct-message.entity';
 import { Thread } from '../threads/thread.entity';
+import { ThreadMessage } from '../thread-messages/thread-message.entity';
 
 @Entity()
 export class User {
@@ -40,6 +41,9 @@ export class User {
 
   @OneToMany(() => Thread, (thread) => thread.user)
   threads: Thread[];
+
+  @OneToMany(() => ThreadMessage, (threadMessage) => threadMessage.user)
+  threadMessages: ThreadMessage[];
 
   @CreateDateColumn()
   createdAt: Date;

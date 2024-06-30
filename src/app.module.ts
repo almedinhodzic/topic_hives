@@ -9,6 +9,7 @@ import { HiveMembersModule } from './hive-members/hive-members.module';
 import { MessagesModule } from './messages/messages.module';
 import { DirectMessagesModule } from './direct-messages/direct-messages.module';
 import { ThreadsModule } from './threads/threads.module';
+import { ThreadMessagesModule } from './thread-messages/thread-messages.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ThreadsModule } from './threads/threads.module';
     MessagesModule,
     DirectMessagesModule,
     ThreadsModule,
+    ThreadMessagesModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
