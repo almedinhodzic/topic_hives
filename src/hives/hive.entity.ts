@@ -10,6 +10,7 @@ import {
 import { User } from '../users/user.entity';
 import { HiveMember } from '../hive-members/hive-member.entity';
 import { Message } from '../messages/message.entity';
+import { Thread } from '../threads/thread.entity';
 
 @Entity()
 export class Hive {
@@ -33,6 +34,9 @@ export class Hive {
 
   @OneToMany(() => Message, (message) => message.hive)
   messages: Message[];
+
+  @OneToMany(() => Thread, (thread) => thread.hive)
+  threads: Thread[];
 
   @CreateDateColumn()
   createdAt: Date;
