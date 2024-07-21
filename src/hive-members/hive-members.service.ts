@@ -7,17 +7,17 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { HiveMember } from './hive-member.entity';
 import { Repository } from 'typeorm';
 import { CreateHiveMemberDto } from './dtos/CreateHiveMemberDto';
-import { Hive } from '../hives/hive.entity';
-import { User } from '../users/user.entity';
 import { UpdateHiveMemberDto } from './dtos/UpdateHiveMemberDto';
+import { HivesService } from '../hives/hives.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class HiveMembersService {
   constructor(
     @InjectRepository(HiveMember)
     private hiveMemberRepository: Repository<HiveMember>,
-    @InjectRepository(Hive) private hiveRepository: Repository<Hive>,
-    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly hivesService: HivesService,
+    private readonly usersService: UsersService,
   ) {}
   async findAll() {
     return await this.hiveMemberRepository.find();
@@ -33,17 +33,13 @@ export class HiveMembersService {
   }
   async create(createHiveMemberDto: CreateHiveMemberDto) {
     const hiveMember = new HiveMember();
-    const hive = await this.hiveRepository.findOne({
-      where: { id: createHiveMemberDto.hiveId },
-    });
+    const hive = await this.hivesService.findOne(createHiveMemberDto.hiveId);
 
     if (!hive) {
       throw new BadRequestException('Hive does not exist');
     }
 
-    const user = await this.userRepository.findOne({
-      where: { id: createHiveMemberDto.userId },
-    });
+    const user = await this.usersService.findOne(createHiveMemberDto.userId);
 
     if (!user) {
       throw new BadRequestException('User does not exist');

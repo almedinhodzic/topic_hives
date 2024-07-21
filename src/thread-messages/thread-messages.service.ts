@@ -2,17 +2,18 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ThreadMessage } from './thread-message.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/user.entity';
-import { Thread } from '../threads/thread.entity';
 import { CreateThreadMessageDto } from './CreateThreadMessageDto';
+import { UsersService } from '../users/users.service';
+import { ThreadsService } from '../threads/threads.service';
 
 @Injectable()
 export class ThreadMessagesService {
   constructor(
     @InjectRepository(ThreadMessage)
     private threadMessagesRepository: Repository<ThreadMessage>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Thread) private threadRepository: Repository<Thread>,
+
+    private readonly usersService: UsersService,
+    private readonly threadsService: ThreadsService,
   ) {}
 
   async findAll() {
@@ -20,16 +21,14 @@ export class ThreadMessagesService {
   }
 
   async create(createThreadMessage: CreateThreadMessageDto) {
-    const user = await this.userRepository.findOne({
-      where: { id: createThreadMessage.userId },
-    });
+    const user = await this.usersService.findOne(createThreadMessage.userId);
     if (!user) {
       throw new BadRequestException('User does not exist');
     }
 
-    const thread = await this.threadRepository.findOne({
-      where: { id: createThreadMessage.threadId },
-    });
+    const thread = await this.threadsService.findOne(
+      createThreadMessage.threadId,
+    );
     if (!thread) {
       throw new BadRequestException('Thread does not exist');
     }

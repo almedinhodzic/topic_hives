@@ -6,17 +6,17 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Thread } from './thread.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/user.entity';
-import { Hive } from '../hives/hive.entity';
 import { CreateThreadDto } from './dtos/CreateThreadDto';
 import { UpdateThreadDto } from './dtos/UpdateThreadDto';
+import { UsersService } from '../users/users.service';
+import { HivesService } from '../hives/hives.service';
 
 @Injectable()
 export class ThreadsService {
   constructor(
     @InjectRepository(Thread) private threadRepository: Repository<Thread>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Hive) private hiveRepository: Repository<Hive>,
+    private readonly usersService: UsersService,
+    private readonly hivesService: HivesService,
   ) {}
 
   async findAll() {
@@ -33,16 +33,12 @@ export class ThreadsService {
   }
 
   async create(createThreadDto: CreateThreadDto) {
-    const user = await this.userRepository.findOne({
-      where: { id: createThreadDto.userId },
-    });
+    const user = await this.usersService.findOne(createThreadDto.userId);
     if (!user) {
       throw new BadRequestException('User does not exist');
     }
 
-    const hive = await this.hiveRepository.findOne({
-      where: { id: createThreadDto.hiveId },
-    });
+    const hive = await this.hivesService.findOne(createThreadDto.hiveId);
     if (!hive) {
       throw new BadRequestException('Hive does not exist');
     }

@@ -3,29 +3,26 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './message.entity';
 import { Repository } from 'typeorm';
 import { CreateMessageDto } from './dtos/CreateMessageDto';
-import { User } from '../users/user.entity';
-import { Hive } from '../hives/hive.entity';
+import { UsersService } from '../users/users.service';
+import { HivesService } from '../hives/hives.service';
 
 @Injectable()
 export class MessagesService {
   constructor(
     @InjectRepository(Message) private messagesRepository: Repository<Message>,
-    @InjectRepository(User) private userRepository: Repository<User>,
-    @InjectRepository(Hive) private hiveRepository: Repository<Hive>,
+
+    private readonly usersService: UsersService,
+    private readonly hivesService: HivesService,
   ) {}
   async findAll() {
     return await this.messagesRepository.find();
   }
   async create(creteMessageDto: CreateMessageDto) {
-    const user = await this.userRepository.findOne({
-      where: { id: creteMessageDto.userId },
-    });
+    const user = await this.usersService.findOne(creteMessageDto.userId);
     if (!user) {
       throw new BadRequestException('Message could not be created');
     }
-    const hive = await this.hiveRepository.findOne({
-      where: { id: creteMessageDto.hiveId },
-    });
+    const hive = await this.hivesService.findOne(creteMessageDto.hiveId);
     if (!hive) {
       throw new BadRequestException('Message could not be created');
     }
