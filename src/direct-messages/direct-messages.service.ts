@@ -2,15 +2,15 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DirectMessage } from './direct-message.entity';
 import { Repository } from 'typeorm';
-import { User } from '../users/user.entity';
 import { CreateDirectMessageDto } from './dtos/CreateDirectMessageDto';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class DirectMessagesService {
   constructor(
     @InjectRepository(DirectMessage)
     private directMessageRepository: Repository<DirectMessage>,
-    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly usersService: UsersService,
   ) {}
 
   async findAll() {
@@ -18,9 +18,9 @@ export class DirectMessagesService {
   }
 
   async create(createDirectMessageDto: CreateDirectMessageDto) {
-    const sender = await this.userRepository.findOne({
-      where: { id: createDirectMessageDto.senderId },
-    });
+    const sender = await this.usersService.findOne(
+      createDirectMessageDto.senderId,
+    );
 
     if (!sender) {
       throw new BadRequestException(
@@ -28,9 +28,9 @@ export class DirectMessagesService {
       );
     }
 
-    const receiver = await this.userRepository.findOne({
-      where: { id: createDirectMessageDto.receiverId },
-    });
+    const receiver = await this.usersService.findOne(
+      createDirectMessageDto.receiverId,
+    );
 
     if (!receiver) {
       throw new BadRequestException(

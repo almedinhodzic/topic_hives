@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './message.entity';
-import { User } from '../users/user.entity';
-import { Hive } from '../hives/hive.entity';
 import { MessagesController } from './messages.controller';
 import { MessagesService } from './messages.service';
+import { UsersModule } from '../users/users.module';
+import { HivesModule } from '../hives/hives.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message, User, Hive])],
+  imports: [TypeOrmModule.forFeature([Message]), UsersModule, HivesModule],
   controllers: [MessagesController],
   providers: [MessagesService],
 })

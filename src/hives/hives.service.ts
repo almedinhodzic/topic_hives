@@ -8,13 +8,13 @@ import { Repository } from 'typeorm';
 import { Hive } from './hive.entity';
 import { CreateHiveDto } from './dtos/CreateHiveDto';
 import { UpdateHiveDto } from './dtos/UpdateHiveDto';
-import { User } from '../users/user.entity';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class HivesService {
   constructor(
     @InjectRepository(Hive) private hiveRepository: Repository<Hive>,
-    @InjectRepository(User) private userRepository: Repository<User>,
+    private readonly usersService: UsersService,
   ) {}
   async findAll() {
     return await this.hiveRepository.find();
@@ -29,9 +29,7 @@ export class HivesService {
 
   async create(createHiveDto: CreateHiveDto) {
     const hive = new Hive();
-    const user = await this.userRepository.findOne({
-      where: { id: createHiveDto.userId },
-    });
+    const user = await this.usersService.findOne(createHiveDto.userId);
     if (!user) {
       throw new BadRequestException('Bad request');
     }
